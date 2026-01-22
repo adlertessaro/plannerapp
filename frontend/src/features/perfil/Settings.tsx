@@ -174,7 +174,7 @@ const Settings: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['usuarios-sistema'] });
       setShowUserModal(false);
       setNewUser({ name: '', email: '', password: '', role: 'ver' });
-      alert("Usuário criado com sucesso! O administrador continua logado.");
+      alert("Usuário criado com sucesso!");
     },
     onError: (error: any) => alert("Erro: " + error.message)
   });

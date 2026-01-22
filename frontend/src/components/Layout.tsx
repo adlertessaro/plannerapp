@@ -11,7 +11,6 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
-import logo from '../../assets/logo.png';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -56,7 +55,7 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
           {/* ESQUERDA: Logo + FOCUS + by Tessaro Labs */}
           <div className="flex items-center gap-3">
             <img 
-              src={logo} 
+              src="/logo.png"  // ← direto, sem import/assets
               alt="Tessaro Planner" 
               className="w-10 h-10 object-contain shrink-0 rounded-lg"
             />
@@ -146,7 +145,8 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
       </main>
       {isMobile && (
         <nav className="md:hidden fixed bottom-0 left-0 w-full h-16 bg-white/95 backdrop-blur-md border-t border-emerald-100 shadow-2xl z-50 px-4">
-          <div className="flex h-full items-center justify-evenly px-4 mx-2">
+          <div className="flex h-full items-center justify-around px-4 mx-2">
+
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               const Icon = item.icon;
