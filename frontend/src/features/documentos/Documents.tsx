@@ -31,6 +31,8 @@ const Documents: React.FC<DocumentsProps> = ({ objetivoSelecionado }) => {
   const [fetchingFile, setFetchingFile] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedDoc, setSelectedDoc] = useState<DocumentRecord | null>(null);
+  const [showSourceModal, setShowSourceModal] = useState(false);
+
 
   const [newDoc, setNewDoc] = useState({
     nome: '',

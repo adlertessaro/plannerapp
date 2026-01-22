@@ -142,7 +142,7 @@ const Settings: React.FC = () => {
     mutationFn: async () => {
       // 1. Criar um cliente temporário que NÃO salva sessão no navegador
       const tempSupabase = createClient(
-        import.meta.env.VITE_SUPABASE_URL,
+        import.meta.env.VITE_DB_URL,
         import.meta.env.VITE_SUPABASE_ANON_KEY,
         { auth: { persistSession: false } }
       );
