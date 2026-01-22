@@ -140,18 +140,20 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
         </div>
       </main>
       {isMobile && (
-        <nav className="md:hidden fixed bottom-0 left-0 w-full h-16 bg-white/95 backdrop-blur-md border-t border-emerald-100 shadow-2xl z-50">
-          {/* Remove px-4 aqui pra centralizar perfeito */}
-          <div className="flex h-full items-end justify-between">  {/* <-- Muda pra justify-between */}
+        <nav className="md:hidden fixed bottom-0 left-0 w-full h-16 bg-white/95 backdrop-blur-md border-t border-emerald-100 shadow-2xl z-50 px-4">
+          <div className="flex h-full items-end justify-around">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               const Icon = item.icon;
               return (
-                <Link
-                  key={item.path}
+                <Link 
+                  key={item.path} 
                   to={item.path}
-                  className="flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 h-full justify-end 
-                          {isActive ? 'bg-emerald-500 text-white shadow-lg' : 'text-emerald-700 hover:bg-emerald-50 active:scale-95'}"  // Ajustei classes inline pra clareza
+                  className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 h-full justify-end ${
+                    isActive 
+                      ? 'bg-emerald-500 text-white shadow-lg' 
+                      : 'text-emerald-700 hover:bg-emerald-50 active:scale-95'
+                  }`}
                 >
                   <Icon size={24} />
                   <span className="text-xs font-bold tracking-tight min-w-[60px] text-center leading-tight">
