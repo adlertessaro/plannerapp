@@ -7,7 +7,6 @@ import Dashboard from './src/features/dashboard/Dashboard';
 import Finance from './src/features/financeiro/Finance';
 import { ObjetivoProvider, useObjetivoAtivo } from './src/context/ObjetivoContext';
 import { supabase } from './src/api/supabase';
-import { useState as useLocalState } from 'react';
 import { Objective } from './src/types/types';
 import Documents from './src/features/documentos/Documents';
 import Settings from './src/features/perfil/Settings';
@@ -88,8 +87,8 @@ const queryClient = new QueryClient();
 // Loader component to fetch Objective by id and render Finance
 
 function FinanceLoader({ objetivoId }: { objetivoId: string | null }) {
-  const [objective, setObjective] = useLocalState<Objective | null>(null);
-  const [loading, setLoading] = useLocalState(true);
+  const [objective, setObjective] = useState<Objective | null>(null);
+  const [loading, setLoading] = useState(true);
   const { setObjetivoId } = useObjetivoAtivo(); // Importe para limpar se necessário
 
   useEffect(() => {
