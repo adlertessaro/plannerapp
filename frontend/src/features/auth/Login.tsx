@@ -50,12 +50,29 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       <div className="max-w-md w-full">
         {/* Logo / Brand */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-600 rounded-[2rem] shadow-xl shadow-emerald-200 text-white font-black text-3xl mb-4 animate-bounce">
-            T
-          </div>
-          <h1 className="text-3xl font-black text-emerald-900 tracking-tight">Tessaro Planner</h1>
-          <p className="text-emerald-600 font-medium">Seu futuro planejado em cada centavo.</p>
-        </div>
+  <div className="flex flex-col items-center gap-3 mb-2">
+    <div className="flex items-center gap-4">
+      {/* LOGO */}
+      <div className="inline-flex items-center justify-center w-16 h-16">
+        <dotlottie-wc
+          src="https://lottie.host/93df163e-63bb-4edf-8b3a-c3bb7073d934/PWPQVrDxrP.lottie"
+          style={{ width: '64px', height: '64px' }}
+          autoplay
+          loop
+        ></dotlottie-wc>
+      </div>
+      
+      {/* NOME AO LADO */}
+      <h1 className="text-3xl font-black text-emerald-900 tracking-tight">FOCUS</h1>
+      <a className="text-emerald-600 hover:text-emerald-800 font-bold text-sm tracking-widest" href="https://tessarolabs.com" target="_blank">
+      by Tessaro Labs
+      </a>
+    </div>
+    </div>
+    
+    <p className="text-emerald-600 font-medium">Seu futuro planejado em cada centavo.</p>
+  </div>
+
 
         {/* Login Card */}
         <div className="bg-white rounded-[2.5rem] shadow-2xl shadow-emerald-100/50 p-8 md:p-10 border border-emerald-100 overflow-hidden relative">

@@ -46,14 +46,20 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
       >
         {/* Header / Logo */}
         <div className={`p-6 border-b border-emerald-100 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
+          {/* ESQUERDA: Logo + FOCUS + by Tessaro Labs */}
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold shrink-0">T</div>
+            
             {!isCollapsed && (
-              <span className="text-xl font-bold text-emerald-900 truncate animate-in fade-in slide-in-from-left-2 duration-300">
-                TessaroPlanner
-              </span>
+              <div className="flex items-center gap-1">
+                <h1 className="text-xl font-black text-emerald-900 tracking-tight">FOCUS</h1>
+                <span className="text-emerald-600 text-xs font-medium tracking-tight">by Tessaro Labs</span>
+              </div>
             )}
           </div>
+          
+          {/* DIREITA: vazio quando expandido */}
+          <div className="flex items-center gap-3 min-w-0" />
         </div>
 
         {/* Informação do Objetivo - Aparece apenas no hover */}
