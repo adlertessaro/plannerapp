@@ -1,8 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY || '',
-});
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
@@ -12,36 +8,28 @@ export default async function handler(req: any, res: any) {
   const { objectiveName, description, targetAmount, currency } = req.body;
 
   try {
-    const prompt = `Decomponha o objetivo "${objectiveName}" (${description}) com orçamento de ${targetAmount} ${currency} em 12 a 18 marcos.`;
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      console.log('❌ GEMINI_API_KEY não encontrada');
+      return res.status(500).json({ error: 'GEMINI_API_KEY não configurada' });
+    }
 
-    // Alterado para camelCase: responseMimeType e responseSchema
-    const result = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: "ARRAY",
-          items: {
-            type: "OBJECT",
-            properties: {
-              title: { type: "STRING" },
-              description: { type: "STRING" },
-              order_index: { type: "INTEGER" }
-            },
-            required: ["title", "description", "order_index"]
-          }
-        }
-      }
-    });
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
 
-    // O novo SDK retorna o texto diretamente na propriedade .text
-    const responseText = result.text;
+    const prompt = `Decomponha "${objectiveName}" (${description}) orçamento ${targetAmount} ${currency} em 12-18 marcos. 
+APENAS JSON array: [{"title":"...", "description":"...", "order_index":1}, ...]`;
+
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text();
     
-    res.status(200).json(JSON.parse(responseText || '[]'));
+    console.log('✅ Resposta Gemini:', responseText.substring(0, 200) + '...');
+    
+    const milestones = JSON.parse(responseText || '[]');
+    res.status(200).json(milestones);
 
-  } catch (error) {
-    console.error('Erro ao gerar marcos:', error);
-    res.status(500).json({ error: 'Erro interno no servidor' });
+  } catch (error: any) {
+    console.error('❌ Erro Gemini:', error.message);
+    res.status(500).json({ error: error.message || 'Erro interno' });
   }
 }
