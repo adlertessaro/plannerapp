@@ -54,16 +54,12 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
         <div className={`p-6 border-b border-emerald-100 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           {/* ESQUERDA: Logo + FOCUS + by Tessaro Labs */}
           <div className="flex items-center gap-3">
-            <img 
-              src="/logo.png"  // ← direto, sem import/assets
-              alt="Tessaro Planner" 
-              className="w-10 h-10 object-contain shrink-0 rounded-lg"
-            />
+            <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold shrink-0">T</div>
             
             {!isCollapsed && (
               <div className="flex items-center gap-1">
                 <h1 className="text-xl font-black text-emerald-900 tracking-tight">FOCUS</h1>
-                <p><span className="text-emerald-600 text-[10px] font-medium tracking-tight">by Tessaro Labs</span></p>
+                <span className="text-emerald-600 text-xs font-medium tracking-tight">by Tessaro Labs</span>
               </div>
             )}
           </div>
@@ -144,21 +140,18 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
         </div>
       </main>
       {isMobile && (
-        <nav className="md:hidden fixed bottom-0 left-0 w-full h-16 bg-white/95 backdrop-blur-md border-t border-emerald-100 shadow-2xl z-50 px-4">
-          <div className="flex h-full items-center justify-around px-4 mx-2">
-
+        <nav className="md:hidden fixed bottom-0 left-0 w-full h-16 bg-white/95 backdrop-blur-md border-t border-emerald-100 shadow-2xl z-50">
+          {/* Remove px-4 aqui pra centralizar perfeito */}
+          <div className="flex h-full items-end justify-between">  {/* <-- Muda pra justify-between */}
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               const Icon = item.icon;
               return (
-                <Link 
-                  key={item.path} 
+                <Link
+                  key={item.path}
                   to={item.path}
-                  className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 h-full justify-end ${
-                    isActive 
-                      ? 'bg-emerald-500 text-white shadow-lg' 
-                      : 'text-emerald-700 hover:bg-emerald-50 active:scale-95'
-                  }`}
+                  className="flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 h-full justify-end 
+                          {isActive ? 'bg-emerald-500 text-white shadow-lg' : 'text-emerald-700 hover:bg-emerald-50 active:scale-95'}"  // Ajustei classes inline pra clareza
                 >
                   <Icon size={24} />
                   <span className="text-xs font-bold tracking-tight min-w-[60px] text-center leading-tight">
