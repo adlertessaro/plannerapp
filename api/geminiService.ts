@@ -1,38 +1,36 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
-// No backend, usamos process.env diretamente
-const genAI = new GoogleGenAI({
+// O cliente busca automaticamente a GEMINI_API_KEY no environment se não for passada explicitamente,
+// mas manteremos a lógica de segurança.
+const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY || '',
 });
 
 export default async function handler(req: any, res: any) {
-  // 1. Verificação de método
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método não permitido' });
   }
 
-  // 2. Extração de parâmetros (mantendo o que você já tinha no frontend)
   const { objectiveName, description, targetAmount, currency } = req.body;
 
   try {
-    // 3. Inicialização do modelo (forma correta do SDK)
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
     const prompt = `Decomponha o objetivo "${objectiveName}" (${description}) com orçamento de ${targetAmount} ${currency} em 12 a 18 marcos.`;
 
-    // 4. Chamada usando a configuração de JSON que você já possuía
-    const result = await model.generateContent({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.ARRAY,
+    // No novo SDK, a chamada é direta através de ai.models.generateContent
+    // e as configurações de JSON usam chaves snake_case (response_mime_type, response_schema)
+    const result = await ai.models.generateContent({
+      model: "gemini-2.0-flash", // Atualizado para a versão recomendada em 2026
+      contents: prompt,
+      config: {
+        response_mime_type: "application/json",
+        response_schema: {
+          type: "ARRAY", // No novo SDK, usamos strings para definir tipos
           items: {
-            type: Type.OBJECT,
+            type: "OBJECT",
             properties: {
-              title: { type: Type.STRING },
-              description: { type: Type.STRING },
-              order_index: { type: Type.INTEGER }
+              title: { type: "STRING" },
+              description: { type: "STRING" },
+              order_index: { type: "INTEGER" }
             },
             required: ["title", "description", "order_index"]
           }
@@ -40,9 +38,9 @@ export default async function handler(req: any, res: any) {
       }
     });
 
-    const responseText = result.response.text();
+    // No novo SDK, o texto da resposta é acessado diretamente por .text
+    const responseText = result.text;
     
-    // 5. Retorno limpo para o frontend
     res.status(200).json(JSON.parse(responseText));
 
   } catch (error) {
