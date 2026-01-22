@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Target, CheckCircle2, Circle, Sparkles, Plus, Trash2, X, Loader2 } from 'lucide-react';
 import { Objective } from '../../types/types';
-import { generateMilestones } from '../../../../api/geminiService';
+import { generateMilestones } from '../../services/geminiService';
 import { supabase } from '../../api/supabase';
 import { useObjetivoAtivo } from '../../context/ObjetivoContext';
 
