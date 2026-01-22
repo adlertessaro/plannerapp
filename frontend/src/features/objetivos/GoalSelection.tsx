@@ -130,8 +130,8 @@ const GoalSelection: React.FC = () => {
         </div>
         
         <header className="mb-12">
-          <h1 className="text-4xl font-black text-emerald-900 mb-2">Qual o plano de hoje?</h1>
-          <p className="text-emerald-600 font-medium">Selecione um objetivo para gerenciar suas finanças.</p>
+          <h1 className="text-4xl font-black text-emerald-900 mb-2">Qual seu novo plano?</h1>
+          <p className="text-emerald-600 font-medium">Selecione ou crie um objetivo para gerenciar suas metas.</p>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -157,7 +157,7 @@ const GoalSelection: React.FC = () => {
 
               <div className="mb-6">
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400">Objetivo Ativo</span>
-                <h3 className="text-2xl font-black text-emerald-900 mt-1">{obj.titulo}</h3>
+                <h3 className="text-2xl font-black text-emerald-900 mt-1 uppercase">{obj.titulo}</h3>
               </div>
 
               <div className="flex items-center gap-3 text-emerald-600 font-bold mb-8">
@@ -186,7 +186,7 @@ const GoalSelection: React.FC = () => {
             <div className="bg-[#059669] p-8 flex justify-between items-center text-white">
               <div>
                 <h2 className="text-2xl font-bold">Novo Plano</h2>
-                <p className="text-emerald-100 text-sm">A IA criará seus marcos automaticamente</p>
+                <p className="text-emerald-100 text-sm">Preencha a descrição com o máximo de detalhes. Seus marcos serão criados automaticamente.</p>
               </div>
               <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-white/20 rounded-xl transition-colors">
                 <X size={24} />

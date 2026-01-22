@@ -3,7 +3,6 @@ import { User, Target, Bell, Globe, Plus, Trash2, X, RefreshCw, CheckCircle2, Lo
 import { supabase } from '../../api/supabase';
 import { Cambio, UserProfile, Currency } from '../../types/types';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
-import { error } from 'console';
 import { createClient } from '@supabase/supabase-js';
 
 const Settings: React.FC = () => {
@@ -306,16 +305,20 @@ const Settings: React.FC = () => {
     onError: (error: any) => alert("Erro ao excluir usuário: " + error.message)
   });
 
+  function formatBRL(valor_meta: any): React.ReactNode {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <div className="space-y-8 max-w-5xl">
       <header className="flex justify-between items-end">
         <div>
           <h1 className="text-3xl font-bold text-emerald-900">Configurações</h1>
-          <p className="text-emerald-600">Gerencie seu perfil e taxas de câmbio turismo</p>
+          <p className="text-emerald-600">Gerencie seu perfil, usuários e permissões</p>
         </div>
         <div className="bg-emerald-50 px-4 py-2 rounded-2xl border border-emerald-100 flex items-center gap-2">
           <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-          <span className="text-[10px] font-bold text-emerald-700 uppercase">Câmbio Atualizado via API</span>
+          <span className="text-[10px] font-bold text-emerald-700 uppercase">Câmbio Atualizado</span>
         </div>
       </header>
 
@@ -330,6 +333,7 @@ const Settings: React.FC = () => {
               <div className="text-center md:text-left flex-1 space-y-2">
                 <input 
                   type="text"
+                  title='Editar Nome'
                   value={editNome}
                   onChange={(e) => setEditNome(e.target.value)}
                   onBlur={() => mutationUpdatePerfil.mutate({ nome: editNome })}
@@ -353,7 +357,7 @@ const Settings: React.FC = () => {
             <div className="space-y-6">
               <h3 className="text-xl font-bold text-emerald-900 flex items-center gap-2">
                 <Target className="text-emerald-500" size={24} /> 
-                {isAdmin ? 'Gerenciar Objetivos do Sistema' : 'Meus Objetivos'}
+                {isAdmin ? 'Gerenciar Objetivos' : 'Meus Objetivos'}
               </h3>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -369,9 +373,9 @@ const Settings: React.FC = () => {
                           <Target size={20} />
                         </div>
                         <div className="flex flex-col">
-                          <span className="font-bold text-emerald-900">{obj.titulo}</span>
+                          <span className="text-xs font-bold text-emerald-900 uppercase">{obj.titulo}</span>
                           {isAdmin && (
-                            <span className="text-[10px] text-emerald-400 font-medium">ID: {obj.usuario_id.slice(0,8)}...</span>
+                            <span className="text-[11px] text-emerald-400 font-medium">Meta: {obj.valor_meta}</span>
                           )}
                         </div>
                       </div>
@@ -394,7 +398,7 @@ const Settings: React.FC = () => {
                     </div>
                   ))
                 ) : (
-                  <p className="col-span-full text-center text-emerald-400 text-sm py-4">Nenhum objetivo encontrado.</p>
+                  <p className="col-span-full text-center text-emerald-400 text-sm py-4">Nenhum objetivo encontrado. Atualize a página</p>
                 )}
 
                 {canEdit && (
@@ -479,7 +483,7 @@ const Settings: React.FC = () => {
         <div className="space-y-8">
           <section className="bg-white p-8 rounded-[2rem] border border-emerald-100 shadow-sm">
             <h3 className="text-lg font-bold text-emerald-900 flex items-center gap-2 mb-6">
-              <Globe className="text-emerald-500" size={20} /> Câmbio Turismo
+              <Globe className="text-emerald-500" size={20} /> Câmbio
             </h3>
             <div className="space-y-4">
               <div className="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100">
@@ -682,7 +686,7 @@ const Settings: React.FC = () => {
                 <option value="admin">Administrador</option>
               </select>
               <button onClick={() => mutationAddUser.mutate()} className="w-full bg-emerald-600 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 transition-all">
-                Salvar no Banco
+                Adicionar Usuário
               </button>
             </div>
           </div>
