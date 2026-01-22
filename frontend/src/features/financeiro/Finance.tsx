@@ -14,6 +14,8 @@ const Finance: React.FC<FinanceProps> = ({ objective }) => {
   const [viewCurrency, setViewCurrency] = useState<Currency>('BRL');
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  
 
   const [newTx, setNewTx] = useState({
     description: '',
@@ -111,6 +113,17 @@ const Finance: React.FC<FinanceProps> = ({ objective }) => {
   const totalExpense = transactions.filter(t => t.tipo === 'expense').reduce((acc, tx) => acc + calculateConverted(tx.valor, tx.moeda as Currency, viewCurrency), 0);
   const flags: Record<Currency, string> = { BRL: '🇧🇷', USD: '🇺🇸', EUR: '🇪🇺' };
 
+  const filteredTransactions = transactions.filter(tx =>
+    searchTerm === '' ||
+    tx.descricao.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    tx.categoria.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    tx.moeda.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    tx.valor.toString().includes(searchTerm) ||
+    calculateConverted(tx.valor, tx.moeda as Currency, viewCurrency).toString().includes(searchTerm) ||
+    new Date(tx.data_transacao).toLocaleDateString('pt-BR').includes(searchTerm) ||
+    (tx.tipo === 'income' ? 'entrada' : 'saída').includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="space-y-8 relative">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -167,7 +180,7 @@ const Finance: React.FC<FinanceProps> = ({ objective }) => {
               <div className="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
                 <ArrowUpCircle size={20} />
               </div>
-              <p className="text-sm font-bold text-emerald-900">Ganhos</p>
+              <p className="text-sm font-bold text-emerald-900">Entradas</p>
             </div>
             <p className="text-lg font-black text-emerald-600">{formatCurrency(totalIncome, viewCurrency)}</p>
           </div>
@@ -177,28 +190,26 @@ const Finance: React.FC<FinanceProps> = ({ objective }) => {
               <div className="w-10 h-10 bg-red-50 text-red-500 rounded-xl flex items-center justify-center">
                 <ArrowDownCircle size={20} />
               </div>
-              <p className="text-sm font-bold text-emerald-900">Gastos</p>
+              <p className="text-sm font-bold text-emerald-900">Saídas</p>
             </div>
-            <p className="text-lg font-black text-red-600">{formatCurrency(totalExpense, viewCurrency)}</p>
+            <p className="text-lg font-black text-red-600">{'-'+ formatCurrency(totalExpense, viewCurrency)}</p>
           </div>
         </div>
       </div>
 
       {/* Filter Bar */}
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1 relative">
+        <div className="relative flex-1">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-400" size={20} />
           <input 
-            type="text" 
             placeholder="Buscar transações..."
-            className="w-full bg-white border border-emerald-100 rounded-2xl py-3 pl-12 pr-4 text-emerald-900 focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+            className="w-full bg-white border border-emerald-100 rounded-2xl py-4 pl-12 pr-4 text-emerald-900 focus:ring-2 focus:ring-emerald-500 outline-none transition-all"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
           />
         </div>
-        <button className="flex items-center gap-2 bg-white border border-emerald-100 text-emerald-600 px-6 py-3 rounded-2xl font-bold hover:bg-emerald-50 transition-all">
-          <Filter size={20} />
-          Filtrar
-        </button>
       </div>
+
 
       {/* Transactions Table */}
       <div className="bg-white rounded-3xl border border-emerald-100 shadow-sm overflow-hidden overflow-x-auto">
@@ -214,7 +225,7 @@ const Finance: React.FC<FinanceProps> = ({ objective }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-emerald-50">
-            {transactions.map((tx) => (
+            {filteredTransactions.map((tx) => (
               <tr key={tx.id} className="hover:bg-emerald-50/30 transition-colors group">
                 <td className="px-6 py-4 text-sm font-medium text-emerald-600">{new Date(tx.data_transacao).toLocaleDateString('pt-BR')}</td>
                 <td className="px-6 py-4">
@@ -236,17 +247,17 @@ const Finance: React.FC<FinanceProps> = ({ objective }) => {
                     <span>{formatCurrency(tx.valor, tx.moeda as Currency)}</span>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-right font-black text-emerald-900">
-                  <span className={tx.type === 'expense' ? 'text-red-600' : 'text-emerald-600'}>
-                    {tx.type === 'expense' ? '- ' : '+ '}
+                <td className="px-6 py-4 text-right font-black">
+                  <span className={tx.tipo === 'expense' ? 'text-red-600 -' : 'text-emerald-600'}>
                     {formatCurrency(calculateConverted(tx.valor, tx.moeda as Currency, viewCurrency), viewCurrency)}
                   </span>
                 </td>
+                {/* 
                 <td className="px-6 py-4 text-right">
                   <button className="text-emerald-300 hover:text-emerald-600 transition-colors p-2 rounded-lg hover:bg-emerald-50">
                     <MoreHorizontal size={20} />
                   </button>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
@@ -362,7 +373,7 @@ const Finance: React.FC<FinanceProps> = ({ objective }) => {
                 type="submit"
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-emerald-100 transition-all active:scale-[0.98]"
               >
-                Adicionar Registro
+                Adicionar Transação
               </button>
             </form>
           </div>

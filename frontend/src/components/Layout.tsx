@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -26,23 +26,29 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const navItems = [
-    { path: '/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
-    { path: '/financeiro', icon: <Wallet size={20} />, label: 'Financeiro' },
-    { path: '/marcos', icon: <Target size={20} />, label: 'Milestones' },
-    { path: '/documentos', icon: <FileText size={20} />, label: 'Documentos' },
-    { path: '/ajustes', icon: <Settings size={20} />, label: 'Ajustes' },
+    { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { path: '/financeiro', icon: Wallet, label: 'Financeiro' },
+    { path: '/marcos', icon: Target, label: 'Milestones' },
+    { path: '/documentos', icon: FileText, label: 'Documentos' },
+    { path: '/ajustes', icon: Settings, label: 'Ajustes' }
   ];
+
+  const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+      const checkMobile = () => setIsMobile(window.innerWidth < 768);
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
   return (
     <div className="flex h-screen bg-emerald-50/30 overflow-hidden">
       {/* Sidebar */}
       <aside 
-        // Gerencia a expansão através do hover do mouse
+        className={`hidden md:block bg-white border-r border-emerald-100 flex flex-col shadow-xl transition-all duration-300 ease-in-out z-50 ${isCollapsed ? 'w-20' : 'w-64'}`}
         onMouseEnter={() => setIsCollapsed(false)}
         onMouseLeave={() => setIsCollapsed(true)}
-        className={`bg-white border-r border-emerald-100 flex flex-col shadow-xl transition-all duration-300 ease-in-out z-50 ${
-          isCollapsed ? 'w-20' : 'w-64'
-        }`}
       >
         {/* Header / Logo */}
         <div className={`p-6 border-b border-emerald-100 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
@@ -65,8 +71,8 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
         {/* Informação do Objetivo - Aparece apenas no hover */}
         {!isCollapsed && selectedObjectiveName && (
           <div className="px-6 py-4 border-b border-emerald-50 bg-emerald-50/50 animate-in fade-in duration-300">
-            <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block mb-1">Objetivo Ativo</span>
-            <p className="text-sm font-bold text-emerald-900 truncate">{selectedObjectiveName}</p>
+            <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block mb-1">Objetivo</span>
+            <p className="text-sm font-bold text-emerald-900 truncate uppercase">{selectedObjectiveName}</p>
           </div>
         )}
 
@@ -84,7 +90,7 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
                   isActive ? 'bg-emerald-600 text-white shadow-lg' : 'text-emerald-600 hover:bg-emerald-50'
                 } ${isCollapsed ? 'justify-center' : ''}`}
               >
-                <span className="shrink-0">{item.icon}</span>
+                <span className="shrink-0"><item.icon size={20} /></span>
                 {!isCollapsed && (
                   <span className="font-medium truncate animate-in fade-in slide-in-from-left-2 duration-300">
                     {item.label}
@@ -116,11 +122,50 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
       </aside>
 
       {/* Conteúdo Principal */}
-      <main className="flex-1 overflow-auto bg-white/50">
-        <div className="p-8 max-w-7xl mx-auto">
+      <main className={`flex-1 overflow-auto bg-white/50 ${isMobile ? 'pb-20 md:pb-0' : ''}`}>
+        <div className="p-4 md:p-8 max-w-7xl mx-auto w-full">
+          <div className="mb-8 pb-4 border-b border-emerald-100 md:hidden">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-black text-2xl shrink-0">
+                F
+              </div>
+              <div>
+                <h1 className="text-2xl font-black text-emerald-900 tracking-tight">FOCUS</h1>
+                <span className="text-emerald-600 text-sm font-medium tracking-tight">by Tessaro Labs</span>
+              </div>
+            </div>
+          </div>
           {children}
+
         </div>
       </main>
+      {isMobile && (
+        <nav className="md:hidden fixed bottom-0 left-0 w-full h-16 bg-white/95 backdrop-blur-md border-t border-emerald-100 shadow-2xl z-50 px-4">
+          <div className="flex h-full items-end justify-around">
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              const Icon = item.icon;
+              return (
+                <Link 
+                  key={item.path} 
+                  to={item.path}
+                  className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 h-full justify-end ${
+                    isActive 
+                      ? 'bg-emerald-500 text-white shadow-lg' 
+                      : 'text-emerald-700 hover:bg-emerald-50 active:scale-95'
+                  }`}
+                >
+                  <Icon size={24} />
+                  <span className="text-xs font-bold tracking-tight min-w-[60px] text-center leading-tight">
+                    {item.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      )}
+
     </div>
   );
 };

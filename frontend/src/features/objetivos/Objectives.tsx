@@ -4,6 +4,7 @@ import { Objective } from '../../types/types';
 import { generateMilestones } from '../../services/geminiService';
 import { supabase } from '../../api/supabase';
 import { useObjetivoAtivo } from '../../context/ObjetivoContext';
+import { Tooltip } from 'recharts';
 
 interface ObjectivesProps {
   objective: Objective | null;
@@ -140,7 +141,7 @@ const Objectives: React.FC = () => {
               className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold disabled:opacity-50"
             >
               {isGenerating ? <Loader2 className="animate-spin" size={18} /> : <Sparkles size={18} />}
-              IA: Gerar Marcos
+              Gerar Marcos
             </button>
           )}
           <button 
@@ -163,7 +164,7 @@ const Objectives: React.FC = () => {
               <div className="text-center py-10 text-emerald-300"><Loader2 className="animate-spin mx-auto" /></div>
             ) : milestones.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-emerald-400 italic">Sua trilha está vazia.</p>
+                <p className="text-emerald-400 italic">Você não tem marcos definidos.</p>
               </div>
             ) : (
               milestones.map((ms) => (

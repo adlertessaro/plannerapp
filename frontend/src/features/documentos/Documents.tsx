@@ -244,13 +244,13 @@ const Documents: React.FC<DocumentsProps> = ({ objetivoSelecionado }) => {
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-emerald-900">Documentos</h1>
-          <p className="text-emerald-600">Checklist e armazenamento seguro</p>
+          <p className="text-emerald-600">Checklist e armazenamento dos documentos necessários</p>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
           className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-2xl font-bold transition-all shadow-lg shadow-emerald-200"
         >
-          <Plus size={20} /> Novo Registro
+          <Plus size={20} /> Novo Documento
         </button>
       </header>
 
@@ -276,11 +276,11 @@ const Documents: React.FC<DocumentsProps> = ({ objetivoSelecionado }) => {
               </div>
               <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 {doc.tipo !== 'Checklist' ? (
-                  <button onClick={() => visualizarDocumento(doc)} className="p-2 text-emerald-400 hover:text-emerald-600 transition-colors">
+                  <button onClick={() => visualizarDocumento(doc)} className="p-2 text-emerald-400 hover:text-emerald-600 transition-colors" title='Visualizar Arquivo'>
                     <Eye size={18} />
                   </button>
                 ) : (
-                  <label className="p-2 text-emerald-400 hover:text-emerald-600 cursor-pointer transition-colors">
+                  <label className="p-2 text-emerald-400 hover:text-emerald-600 cursor-pointer transition-colors" title="Adicionar Arquivo">
                     <Plus size={18} />
                     <input type="file" className="hidden" onChange={(e) => handleUpdateFile(doc.id, e)} />
                   </label>
@@ -303,8 +303,8 @@ const Documents: React.FC<DocumentsProps> = ({ objetivoSelecionado }) => {
             </button>
 
             <div className="mt-4 pt-4 border-t border-emerald-50 flex items-center justify-between">
-              <span className="text-[10px] text-emerald-300 font-bold">{new Date(doc.criado_em).toLocaleDateString('pt-BR')}</span>
-              <button onClick={() => removerDocumento(doc.id)} className="text-red-200 hover:text-red-500 transition-colors">
+              <span className="text-[10px] text-emerald-300 font-bold">{'Criado em: ' + new Date(doc.criado_em).toLocaleDateString('pt-BR')}</span>
+              <button onClick={() => removerDocumento(doc.id)} className="text-red-200 hover:text-red-500 transition-colors" title='Remover Arquivo'>
                 <Trash2 size={16} />
               </button>
             </div>
@@ -339,8 +339,8 @@ const Documents: React.FC<DocumentsProps> = ({ objetivoSelecionado }) => {
           <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
             <div className="bg-emerald-600 p-8 flex justify-between items-center text-white">
               <div>
-                <h2 className="text-2xl font-bold">Novo Registro</h2>
-                <p className="text-emerald-100 text-sm">Tarefa ou documento anexo</p>
+                <h2 className="text-2xl font-bold">Novo Documento</h2>
+                <p className="text-emerald-100 text-sm">Adicione uma tarefa ou documento/anexo</p>
               </div>
               <button onClick={() => setShowAddModal(false)} className="p-2 hover:bg-white/20 rounded-xl transition-colors"><X size={24} /></button>
             </div>

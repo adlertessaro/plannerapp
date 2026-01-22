@@ -129,8 +129,8 @@ const Dashboard: React.FC = () => {
     <div className="space-y-8">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-emerald-900">{objective.titulo}</h1>
-          <p className="text-emerald-600">Visão geral do seu progresso financeiro</p>
+          <h1 className="text-3xl font-bold text-emerald-900 uppercase">{objective.titulo}</h1>
+          <p className="text-emerald-600">Visão geral do seu progresso</p>
         </div>
         <div className="bg-white px-4 py-2 rounded-2xl border border-emerald-100 shadow-sm flex items-center gap-3">
           <Calendar className="text-emerald-500" size={20} />
