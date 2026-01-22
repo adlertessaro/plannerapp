@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
+import Logo from '../../assets/logo.png'; 
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -54,12 +55,16 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
         <div className={`p-6 border-b border-emerald-100 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
           {/* ESQUERDA: Logo + FOCUS + by Tessaro Labs */}
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold shrink-0">T</div>
+            <img 
+                src={Logo} 
+                alt="Tessaro Labs Logo" 
+                className="w-12 h-12 rounded-xl shrink-0 object-contain bg-white/20 p-1" 
+              />
             
             {!isCollapsed && (
               <div className="flex items-center gap-1">
                 <h1 className="text-xl font-black text-emerald-900 tracking-tight">FOCUS</h1>
-                <span className="text-emerald-600 text-xs font-medium tracking-tight">by Tessaro Labs</span>
+                <span className="text-emerald-600 text-[10px] font-medium tracking-tight">by Tessaro Labs</span>
               </div>
             )}
           </div>
@@ -126,9 +131,11 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
         <div className="p-4 md:p-8 max-w-7xl mx-auto w-full">
           <div className="mb-8 pb-4 border-b border-emerald-100 md:hidden">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-black text-2xl shrink-0">
-                F
-              </div>
+              <img 
+                src={Logo} 
+                alt="Tessaro Labs Logo" 
+                className="w-12 h-12 rounded-xl shrink-0 object-contain bg-white/20 p-1" 
+              />
               <div>
                 <h1 className="text-2xl font-black text-emerald-900 tracking-tight">FOCUS</h1>
                 <span className="text-emerald-600 text-sm font-medium tracking-tight">by Tessaro Labs</span>
