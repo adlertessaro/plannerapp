@@ -147,7 +147,7 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
         </div>
       </main>
       {isMobile && (
-        <nav className="md:hidden fixed bottom-0 -ml-1 md:ml-0 left-0 right-0 bg-white border-t z-50  px-1 py-2 shadow-lg flex justify-center">
+        <nav className="md:hidden fixed bottom-0 -ml-1 md:ml-0 left-0 right-0 bg-white border-t z-50  px-1 py-1 shadow-lg flex justify-center">
           <div className="flex h-full items-end justify-around">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
