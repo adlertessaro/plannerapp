@@ -11,6 +11,7 @@ interface FinanceProps {
 }
 
 const Finance: React.FC<FinanceProps> = ({ objective }) => {
+  console.log('🔥 Finance carregou com:', useUserCurrency);
   const { userCurrency } = useUserCurrency();
   const [showAddModal, setShowAddModal] = useState(false);
   const [viewCurrency, setViewCurrency] = useState<Currency>('BRL');
@@ -50,8 +51,6 @@ const Finance: React.FC<FinanceProps> = ({ objective }) => {
       setLoading(false);
     }
   };
-
-  console.log('🔥 Finance userCurrency:', userCurrency);  // ← Abre F12 > Console
 
   //salvar transação no bando
   const handleAddTransaction = async (e: React.FormEvent) => {

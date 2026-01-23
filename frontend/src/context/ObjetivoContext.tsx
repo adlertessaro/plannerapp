@@ -1,4 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../api/supabase';
 
 // 1. Definimos o que o nosso "balde de informações" vai guardar
 interface ObjetivoContextType {
@@ -14,6 +16,14 @@ export const ObjetivoProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     // Tenta buscar do navegador se o usuário já escolheu antes
     return localStorage.getItem('objetivo_ativo_id');
   });
+
+  const { data: todosObjetivos } = useQuery({
+  queryKey: ['todos-objetivos'],
+  queryFn: async () => {
+    const { data } = await supabase.from('objetivos').select('*');
+    return data || [];
+  }
+});
 
   const setObjetivoId = (id: string) => {
     setObjetivoIdState(id);
