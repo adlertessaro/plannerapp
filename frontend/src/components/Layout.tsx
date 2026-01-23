@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -35,6 +35,33 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
   ];
 
   const [isMobile, setIsMobile] = useState(false);
+
+  const [showMenu, setShowMenu] = useState(false);
+
+  const mainRef = useRef<HTMLDivElement>(null);
+
+    // Fecha menu ao clicar fora
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        const menuButton = document.querySelector('button[title="Mais opções"]'); // ou dá id="menu-btn"
+        const menuElement = document.querySelector('.absolute.-top-2.-right-2'); // seletor do dropdown
+        
+        if (showMenu && 
+            !menuButton?.contains(event.target as Node) && 
+            !menuElement?.contains(event.target as Node)) {
+          setShowMenu(false);
+        }
+      };
+
+      if (showMenu) {
+        document.addEventListener('click', handleClickOutside);
+      }
+
+      return () => {
+        document.removeEventListener('click', handleClickOutside);
+      };
+    }, [showMenu]);
+
 
     useEffect(() => {
       const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -127,23 +154,64 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
       </aside>
 
       {/* Conteúdo Principal */}
-      <main className={`flex-1 overflow-auto bg-white/50 ${isMobile ? 'pb-20 md:pb-0' : ''}`}>
+      <main ref={mainRef} className={`flex-1 overflow-auto bg-white/50 ${isMobile ? 'pb-20 md:pb-0' : ''}`}>
         <div className="p-4 md:p-8 max-w-7xl mx-auto w-full">
           <div className="mb-8 pb-4 border-b border-emerald-100 md:hidden">
-            <div className="flex items-center gap-3">
-              <img 
-                src={Logo} 
-                alt="Tessaro Labs Logo" 
-                className="w-12 h-12 rounded-xl shrink-0 object-contain bg-white/20 p-1" 
-              />
-              <div>
-                <h1 className="text-2xl font-black text-emerald-900 tracking-tight">FOCUS</h1>
-                <span className="text-emerald-600 text-sm font-medium tracking-tight">by Tessaro Labs</span>
+            <div className="flex items-center justify-between w-full px-4 py-4">
+              <div className="flex items-center gap-3 flex-shrink-0">
+                <img 
+                  src={Logo} 
+                  alt="Tessaro Labs Logo" 
+                  className="w-12 h-12 rounded-xl shrink-0 object-contain bg-white/20 p-1" 
+                />
+                <div className="min-w-0">
+                  <h1 className="text-2xl font-black text-emerald-900 tracking-tight truncate">FOCUS</h1>
+                  <span className="text-emerald-600 text-sm font-medium tracking-tight">by Tessaro Labs</span>
+                </div>
+              </div>
+              
+              {/* Botão 3 pontinhos - SEMPRE no canto direito */}
+              <div className="relative ml-4">
+                <button
+                  className="p-3 rounded-2xl bg-white shadow-md border border-emerald-200 hover:shadow-lg hover:border-emerald-300 active:scale-[0.98] transition-all flex items-center justify-center w-12 h-12 text-emerald-700 font-bold text-xl z-10"
+                  onClick={() => setShowMenu(!showMenu)}
+                  title="Mais opções"
+                >
+                  ⋮⋮⋮
+                </button>
+                
+                {/* Dropdown */}
+                {showMenu && (
+                  <div className="absolute -top-2 -right-2 mt-14 w-56 bg-white border border-emerald-100 rounded-3xl shadow-2xl py-3 px-2 animate-in fade-in zoom-in duration-200 z-50 backdrop-blur-sm">
+                    <button
+                      onClick={() => {
+                        onClearObjective(); 
+                        setShowMenu(false);
+                      }}
+                      className="flex items-center gap-3 w-full px-4 py-3 rounded-2xl hover:bg-emerald-50 text-amber-700 font-semibold transition-all group text-sm"
+                    >
+                      <ArrowLeftRight size={20} className="shrink-0 group-hover:rotate-12" />
+                      <span>Trocar Objetivo</span>
+                    </button>
+                    <div className="mx-2 my-1 w-full h-px bg-emerald-100" />
+                    <button
+                      onClick={() => {
+                        onLogout(); 
+                        setShowMenu(false);
+                      }}
+                      className="flex items-center gap-3 w-full px-4 py-3 rounded-2xl hover:bg-red-50 text-red-600 font-semibold transition-all text-sm"
+                    >
+                      <LogOut size={20} className="shrink-0" />
+                      <span>Sair da Sessão</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-          {children}
 
+          {children}
+          
         </div>
       </main>
       {isMobile && (
@@ -156,6 +224,9 @@ const Layout: React.FC<LayoutProps> = ({ children, selectedObjectiveName, onClea
                 <Link 
                   key={item.path} 
                   to={item.path}
+                  onClick={() => {
+                  mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
                   className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all flex-1 h-full justify-end ${
                     isActive 
                       ? 'bg-emerald-500 text-white shadow-lg' 
