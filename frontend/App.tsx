@@ -12,6 +12,7 @@ import Documents from './src/features/documentos/Documents';
 import Settings from './src/features/perfil/Settings';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Objectives from './src/features/objetivos/Objectives';
+import { CurrencyProvider } from './src/context/CurrencyContext';
 
 // --- COMPONENTES DE PROTEÇÃO DE ROTA ---
 
@@ -89,7 +90,7 @@ const queryClient = new QueryClient();
 function FinanceLoader({ objetivoId }: { objetivoId: string | null }) {
   const [objective, setObjective] = useState<Objective | null>(null);
   const [loading, setLoading] = useState(true);
-  const { setObjetivoId } = useObjetivoAtivo(); // Importe para limpar se necessário
+  const { setObjetivoId } = useObjetivoAtivo();
 
   useEffect(() => {
     const fetchObjective = async () => {
@@ -247,11 +248,13 @@ function AppContent() {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <CurrencyProvider>
       <ObjetivoProvider>
         <HashRouter>
           <AppContent />
         </HashRouter>
       </ObjetivoProvider>
+      </CurrencyProvider>
     </QueryClientProvider>
   );
 }

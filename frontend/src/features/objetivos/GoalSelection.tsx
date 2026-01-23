@@ -36,7 +36,6 @@ const GoalSelection: React.FC = () => {
       const { data, error } = await supabase
         .from('objetivos')
         .select('*')
-        .eq('usuario_id', user.id);
       
       if (!error && data) setObjetivos(data);
     }

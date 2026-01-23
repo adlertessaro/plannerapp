@@ -21,8 +21,10 @@ import {
 } from 'recharts';
 import { supabase } from '../../api/supabase';
 import { useObjetivoAtivo } from '../../context/ObjetivoContext';
+import { useUserCurrency } from '../../context/CurrencyContext';
 
 const Dashboard: React.FC = () => {
+  const { userCurrency } = useUserCurrency();
   const { objetivoId } = useObjetivoAtivo(); 
   const [objective, setObjective] = useState<Objective | null>(null);
   const [loading, setLoading] = useState(true);
@@ -152,7 +154,8 @@ const Dashboard: React.FC = () => {
           <div>
             <p className="text-sm font-medium text-emerald-400">Total Poupado</p>
             <h3 className="text-2xl font-bold text-emerald-900">
-                {totalPoupado.toLocaleString('pt-BR', { style: 'currency', currency: objective.moeda_alvo || 'BRL' })}
+              {totalPoupado.toLocaleString('pt-BR', { style: 'currency', currency: userCurrency 
+              })}
             </h3>
           </div>
         </div>
@@ -163,7 +166,10 @@ const Dashboard: React.FC = () => {
           <div>
             <p className="text-sm font-medium text-amber-400">Faltam</p>
             <h3 className="text-2xl font-bold text-amber-900">
-                {faltam.toLocaleString('pt-BR', { style: 'currency', currency: objective.moeda_alvo || 'BRL' })}
+                {faltam.toLocaleString('pt-BR', { 
+                  style: 'currency', 
+                  currency: userCurrency 
+                })}
             </h3>
           </div>
         </div>

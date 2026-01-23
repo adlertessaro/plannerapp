@@ -5,6 +5,7 @@ import { Cambio, UserProfile, Currency } from '../../types/types';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { createClient } from '@supabase/supabase-js';
 
+
 const Settings: React.FC = () => {
   const queryClient = useQueryClient();
   
@@ -62,11 +63,11 @@ const Settings: React.FC = () => {
 
     let query = supabase.from('objetivos').select('*');
 
-    // Se NÃO for admin, filtramos apenas os objetivos do próprio usuário
-    // Se for admin, a query trará todos do banco conforme solicitado
-    if (perfil?.permissao !== 'admin') {
-      query = query.eq('usuario_id', user.id);
-    }
+    // // Se NÃO for admin, filtramos apenas os objetivos do próprio usuário
+    // // Se for admin, a query trará todos do banco conforme solicitado
+    // if (perfil?.permissao !== 'admin') {
+    //   query = query.eq('usuario_id', user.id);
+    // }
 
     const { data, error } = await query;
     if (error) {
@@ -96,8 +97,10 @@ const Settings: React.FC = () => {
       if (!user) return;
       await supabase.from('perfis').update(updates).eq('id', user.id);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['perfil'] })
-  });
+    onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['perfil'] });
+    queryClient.invalidateQueries({ queryKey: ['userCurrency'] });
+  }});
 
   const mutationAddObj = useMutation({
   mutationFn: async () => {

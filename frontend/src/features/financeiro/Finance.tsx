@@ -4,12 +4,14 @@ import { Plus, Search, Filter, ArrowUpCircle, ArrowDownCircle, MoreHorizontal, X
 import { Transaction, Objective, Currency } from '../../types/types';
 import { CURRENCIES, CATEGORIES, EXCHANGE_RATES } from '../../../src/constants';
 import { supabase } from '../../api/supabase';
+import { useUserCurrency } from '../../context/CurrencyContext';
 
 interface FinanceProps {
   objective: Objective;
 }
 
 const Finance: React.FC<FinanceProps> = ({ objective }) => {
+  const { userCurrency } = useUserCurrency();
   const [showAddModal, setShowAddModal] = useState(false);
   const [viewCurrency, setViewCurrency] = useState<Currency>('BRL');
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -24,6 +26,10 @@ const Finance: React.FC<FinanceProps> = ({ objective }) => {
     type: 'income' as 'income' | 'expense',
     category: 'Outros'
   });
+
+  useEffect(() => {
+    if (userCurrency) setViewCurrency(userCurrency); 
+  }, [userCurrency]);
 
   useEffect(() => {
     if (objective?.id) fechTransactions();
@@ -44,6 +50,8 @@ const Finance: React.FC<FinanceProps> = ({ objective }) => {
       setLoading(false);
     }
   };
+
+  console.log('🔥 Finance userCurrency:', userCurrency);  // ← Abre F12 > Console
 
   //salvar transação no bando
   const handleAddTransaction = async (e: React.FormEvent) => {
